@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "209909842735",
+    "project_id": "rakan-aneuk",
+    "storage_bucket": "rakan-aneuk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209909842735:android:e60cf700d2c7b6765957da",
+        "android_client_info": {
+          "package_name": "com.rakan_aneuk.rakan_aneuk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBavugHCXNn_GfoPQR9MSsDubOMUyaFM8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

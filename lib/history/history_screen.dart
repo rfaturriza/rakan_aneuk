@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rakan_aneuk/classification/classification_result_screen.dart';
 import 'package:rakan_aneuk/history/curve_history_screen.dart';
@@ -17,30 +18,40 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Riwayat'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () {
-              Navigator.of(context).pushNamed(CurveHistoryScreen.routeName);
-            },
-          ),
-        ],
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                CurveHistoryScreen.routeName,
-                arguments: ClassificationResultArguments(id: index.toString()),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('classification')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-            title: Text('Riwayat ke-$index'),
-            subtitle: Text('Detail riwayat ke-$index'),
-          );
-        },
-      ),
+            }
+            if (!snapshot.hasData) {
+              return const Center(
+                child: Text('Data tidak ditemukan'),
+              );
+            }
+            final data = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      CurveHistoryScreen.routeName,
+                      arguments:
+                          ClassificationResultArguments(id: index.toString()),
+                    );
+                  },
+                  title: Text(data[index]['created_at'].toDate().toString()),
+                  subtitle: Text('Hasil: ${data[index]['result']}'),
+                );
+              },
+            );
+          }),
     );
   }
 }

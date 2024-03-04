@@ -84,6 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               decoration: const InputDecoration(
                 labelText: 'Nama',
+                hintText: 'Masukkan nama lengkap',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -111,6 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               decoration: const InputDecoration(
                 labelText: 'Tanggal Lahir',
+                hintText: 'Pilih tanggal lahir',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -120,11 +122,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Email tidak boleh kosong';
+                } else if (!value.contains('@')) {
+                  return 'Email tidak valid';
                 }
                 return null;
               },
               decoration: const InputDecoration(
                 labelText: 'Email',
+                hintText: 'contoh@contoh.com',
                 border: OutlineInputBorder(),
               ),
             ),

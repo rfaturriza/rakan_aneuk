@@ -1,17 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:rakan_aneuk/classification/clasification_screen.dart';
-import 'package:rakan_aneuk/classification/classification_result_screen.dart';
-import 'package:rakan_aneuk/history/history_screen.dart';
 import 'package:rakan_aneuk/home/home_screen.dart';
-import 'package:rakan_aneuk/auth/register_screen.dart';
-import 'package:rakan_aneuk/profile/edit_profile_screen.dart';
-import 'package:rakan_aneuk/profile/profile_screen.dart';
 import 'package:rakan_aneuk/routes.dart';
+import 'package:rakan_aneuk/theme.dart';
 
-import 'firebase_options.dart';
 import 'auth/login_screen.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,10 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RaKan Aneuk',
       routes: routes,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: theme,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

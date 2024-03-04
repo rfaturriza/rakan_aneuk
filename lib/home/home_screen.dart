@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rakan_aneuk/classification/clasification_screen.dart';
+import 'package:rakan_aneuk/classification/classification_screen.dart';
 import 'package:rakan_aneuk/profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Beranda'),
       ),
       body: const Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Logo extends StatelessWidget {
-  const _Logo({super.key});
+  const _Logo();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _Logo extends StatelessWidget {
 }
 
 class _MenuSection extends StatelessWidget {
-  const _MenuSection({super.key});
+  const _MenuSection();
 
   @override
   Widget build(BuildContext context) {

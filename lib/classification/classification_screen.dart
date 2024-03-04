@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'calculate/calculate_zscoring.dart';
+import 'classification_result_screen.dart';
 
 class ClassificationScreen extends StatefulWidget {
   static const routeName = '/classification';
@@ -15,6 +19,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
   final heightController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   var isLoading = false;
+  var gender = Gender.male;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,35 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
         setState(() {
           isLoading = true;
         });
+        final calculateZScoring = CalculateZScoring(
+          age: int.parse(ageController.text),
+          weight: double.parse(weightController.text),
+          height: double.parse(heightController.text),
+          gender: gender,
+        );
+        final status = calculateZScoring.statusBBPB();
+        final result =
+            await FirebaseFirestore.instance.collection('classification').add({
+          'age': int.parse(ageController.text),
+          'weight': double.parse(weightController.text),
+          'height': double.parse(heightController.text),
+          'gender': gender.name,
+          'result': status,
+          'created_at': FieldValue.serverTimestamp(),
+        });
+        Navigator.pushNamed(
+          context,
+          ClassificationResultScreen.routeName,
+          arguments: ClassificationResultArguments(
+            id: result.id,
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+          ),
+        );
       } finally {
         setState(() {
           isLoading = false;
@@ -43,6 +77,22 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: <Widget>[
+            DropdownButton(
+              isExpanded: true,
+              value: gender,
+              items: Gender.values.map((e) {
+                return DropdownMenuItem(
+                  value: e,
+                  child: Text(e.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                debugPrint('value: $value');
+                setState(() {
+                  gender = value ?? Gender.male;
+                });
+              },
+            ),
             TextFormField(
               controller: ageController,
               decoration: const InputDecoration(
@@ -53,7 +103,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
             TextFormField(
               controller: weightController,
               decoration: const InputDecoration(
-                labelText: 'Panjang Badan (kg)',
+                labelText: 'Berat Badan (kg)',
               ),
               keyboardType: TextInputType.number,
             ),
@@ -61,7 +111,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
             TextFormField(
               controller: heightController,
               decoration: const InputDecoration(
-                labelText: 'Tinggi Badan (cm)',
+                labelText: 'Panjang Badan (cm)',
               ),
               keyboardType: TextInputType.number,
             ),

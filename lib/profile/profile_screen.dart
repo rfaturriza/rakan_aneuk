@@ -22,51 +22,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text('Profil'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(EditProfileScreen.routeName);
-            },
-            child: const Text('Ubah Profil'),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(HistoryScreen.routeName);
-            },
-            child: const Text('Riwayat Saya'),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProfileScreen.routeName);
+              },
+              child: const Text('Ubah Profil'),
             ),
-            onPressed: () async {
-              try {
-                setState(() {
-                  isSigningOut = true;
-                });
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  LoginScreen.routeName,
-                  (route) => false,
-                );
-              } catch (e) {
-                debugPrint(e.toString());
-              } finally {
-                setState(() {
-                  isSigningOut = false;
-                });
-              }
-            },
-            child: const Text('Logout'),
-          ),
-        ],
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(HistoryScreen.routeName);
+              },
+              child: const Text('Riwayat Saya'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                foregroundColor: Theme.of(context).colorScheme.onError,
+              ),
+              onPressed: () async {
+                try {
+                  setState(() {
+                    isSigningOut = true;
+                  });
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    LoginScreen.routeName,
+                    (route) => false,
+                  );
+                } catch (e) {
+                  debugPrint(e.toString());
+                } finally {
+                  setState(() {
+                    isSigningOut = false;
+                  });
+                }
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        ),
       ),
     );
   }

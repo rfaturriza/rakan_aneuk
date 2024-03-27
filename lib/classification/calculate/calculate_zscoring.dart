@@ -31,8 +31,8 @@ class CalculateZScoring {
     required this.gender,
   });
 
-  String statusBBPB() {
-    final zScoreBBPB = _calculateZScoreBBPB();
+  Future<String> statusBBPB() async {
+    final zScoreBBPB = await _calculateZScoreBBPB();
     if (zScoreBBPB < -3) {
       return 'Sangat Kurus';
     } else if (zScoreBBPB < -2) {
@@ -46,7 +46,7 @@ class CalculateZScoring {
     }
   }
 
-  double _calculateZScoreBBPB() {
+  Future<double> _calculateZScoreBBPB() async {
     final standardBBPB024 = () {
       if (gender == Gender.male) {
         return StandardBBPB024.calculateBoy(height);

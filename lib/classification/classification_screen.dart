@@ -37,7 +37,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
           height: double.parse(heightController.text),
           gender: gender,
         );
-        final status = calculateZScoring.statusBBPB();
+        final status = await calculateZScoring.statusBBPB();
         final result =
             await FirebaseFirestore.instance.collection('classification').add({
           'age': int.parse(ageController.text),

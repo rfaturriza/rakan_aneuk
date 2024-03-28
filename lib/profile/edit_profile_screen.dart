@@ -37,6 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Future<void> onSubmit() async {
+      FocusScope.of(context).unfocus();
       if (!formKey.currentState!.validate()) {
         return;
       }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rakan_aneuk/classification/classification_result_screen.dart';
-import 'package:rakan_aneuk/history/curve_history_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
   static const routeName = '/history';
@@ -22,6 +22,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('classification')
+              .where('uid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,10 +41,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
-                    Navigator.of(context).pushNamed(
-                      CurveHistoryScreen.routeName,
-                      arguments:
-                          ClassificationResultArguments(id: index.toString()),
+                    Navigator.pushNamed(
+                      context,
+                      ClassificationResultScreen.routeName,
+                      arguments: ClassificationResultArguments(
+                        id: data[index].id,
+                        canPop: true,
+                      ),
                     );
                   },
                   title: Text(data[index]['created_at'].toDate().toString()),

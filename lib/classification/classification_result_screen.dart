@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ClassificationResultArguments {
+  final bool canPop;
   final String id;
 
   ClassificationResultArguments({
     required this.id,
+    this.canPop = false,
   });
 }
 
@@ -25,11 +27,34 @@ class _ClassificationResultScreenState
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as ClassificationResultArguments;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hasil Klasifikasi'),
-      ),
-      body: FutureBuilder(
+    void onBack() {
+      if (args.canPop) {
+        Navigator.pop(context);
+        return;
+      }
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+
+    return PopScope(
+      canPop: args.canPop,
+      onPopInvoked: (willPop) async {
+        if (willPop) {
+          Navigator.pop(context);
+          return;
+        }
+        Navigator.popUntil(context, (route) => route.isFirst);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Hasil Klasifikasi'),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: ElevatedButton(
+            onPressed: onBack,
+            child: const Text('Kembali'),
+          ),
+        ),
+        body: FutureBuilder(
           future: FirebaseFirestore.instance
               .collection('classification')
               .doc(args.id)
@@ -81,7 +106,9 @@ class _ClassificationResultScreenState
                 ),
               ],
             );
-          }),
+          },
+        ),
+      ),
     );
   }
 }

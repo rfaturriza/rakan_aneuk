@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'calculate/calculate_zscoring.dart';
@@ -24,6 +25,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
   @override
   Widget build(BuildContext context) {
     Future<void> onSubmit() async {
+      FocusScope.of(context).unfocus();
       if (!formKey.currentState!.validate()) {
         return;
       }
@@ -46,6 +48,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
           'gender': gender.name,
           'result': status,
           'created_at': FieldValue.serverTimestamp(),
+          'uid': FirebaseAuth.instance.currentUser?.uid,
         });
         Navigator.pushNamed(
           context,

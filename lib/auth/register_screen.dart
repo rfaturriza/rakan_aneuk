@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../home/home_screen.dart';
+import 'package:rakan_aneuk/auth/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/register';
@@ -25,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     Future<void> onRegister() async {
+      FocusScope.of(context).unfocus();
       if (!formKey.currentState!.validate()) {
         return;
       }
@@ -45,10 +45,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'name': nameController.text,
           'dateOfBirth': dateOfBirthController.text,
           'email': emailController.text,
+          'isVerified': false,
         });
+        await credential.user?.sendEmailVerification();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Email verifikasi telah dikirim, silahkan cek email Anda',
+            ),
+          ),
+        );
+        await FirebaseAuth.instance.signOut();
         Navigator.pushNamedAndRemoveUntil(
           context,
-          HomeScreen.routeName,
+          LoginScreen.routeName,
           (route) => false,
         );
       } on FirebaseAuthException catch (e) {

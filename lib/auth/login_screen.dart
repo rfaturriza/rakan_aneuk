@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Future<void> onLogin() async {
+      FocusScope.of(context).unfocus();
       if (!_formKey.currentState!.validate()) {
         return;
       }
@@ -29,10 +30,33 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isLoading = true;
         });
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        final credential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
+        if (!credential.user!.emailVerified) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Email belum diverifikasi, silahkan cek email Anda',
+              ),
+              action: SnackBarAction(
+                label: 'Kirim ulang',
+                onPressed: () async {
+                  await credential.user?.sendEmailVerification();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Email verifikasi telah dikirim'),
+                    ),
+                  );
+                  await FirebaseAuth.instance.signOut();
+                },
+              ),
+            ),
+          );
+          return;
+        }
         Navigator.pushNamedAndRemoveUntil(
           context,
           HomeScreen.routeName,

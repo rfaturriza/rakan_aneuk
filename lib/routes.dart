@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rakan_aneuk/nutrition_suggestion/nutrition_suggestion_screen.dart';
 import 'package:rakan_aneuk/profile/edit_profile_screen.dart';
 import 'package:rakan_aneuk/profile/profile_screen.dart';
 
@@ -19,4 +20,6 @@ Map<String, Widget Function(BuildContext)> routes = <String, WidgetBuilder>{
   ClassificationScreen.routeName: (context) => const ClassificationScreen(),
   ClassificationResultScreen.routeName: (context) =>
       const ClassificationResultScreen(),
+  NutritionSuggestionScreen.routeName: (context) =>
+      const NutritionSuggestionScreen(),
 };

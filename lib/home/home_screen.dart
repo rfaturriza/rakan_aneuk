@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rakan_aneuk/classification/classification_screen.dart';
+import 'package:rakan_aneuk/nutrition_suggestion/nutrition_suggestion_screen.dart';
 import 'package:rakan_aneuk/profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -63,7 +64,9 @@ class _MenuSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(NutritionSuggestionScreen.routeName);
+          },
           child: const Text('Saran Kebutuhan Gizi Anak'),
         ),
         const SizedBox(height: 16),

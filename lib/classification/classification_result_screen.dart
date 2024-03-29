@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:rakan_aneuk/classification/calculate/calculate_zscoring.dart';
 
 class ClassificationResultArguments {
   final bool canPop;
@@ -71,6 +73,15 @@ class _ClassificationResultScreenState
               );
             }
             final data = snapshot.data?.data() as Map<String, dynamic>;
+            final result = ResultZScoringAge.values.firstWhere(
+              (element) => element.name == data['result'],
+            );
+            final dateReadable = () {
+              final date = data['created_at'].toDate();
+              return DateFormat.yMMMMEEEEd(
+                'id_ID',
+              ).format(date);
+            }();
             return ListView(
               padding: const EdgeInsets.all(16),
               children: <Widget>[
@@ -81,6 +92,14 @@ class _ClassificationResultScreenState
                         title: Text('Hasil Klasifikasi'),
                       ),
                       const Divider(),
+                      ListTile(
+                        title: const Text('Tanggal'),
+                        subtitle: Text(dateReadable),
+                      ),
+                      ListTile(
+                        title: const Text('Jenis Kelamin'),
+                        subtitle: Text('${data['gender']}'),
+                      ),
                       ListTile(
                         title: const Text('Umur'),
                         subtitle: Text('${data['age']} bulan'),
@@ -95,13 +114,13 @@ class _ClassificationResultScreenState
                       ),
                       ListTile(
                         title: const Text('Status Gizi'),
-                        subtitle: Text('${data['result']}'),
+                        subtitle: Text(result.name),
                       ),
                     ],
                   ),
                 ),
                 Text(
-                  'Keterangan: ${data['result'] == 'Gizi Baik' ? 'Anak Anda memiliki status gizi baik' : 'Anak Anda memiliki status gizi buruk'}',
+                  'Keterangan: ${result.description}',
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ],

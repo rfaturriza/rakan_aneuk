@@ -46,7 +46,7 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
           'weight': double.parse(weightController.text),
           'height': double.parse(heightController.text),
           'gender': gender.name,
-          'result': status,
+          'result': status.name,
           'created_at': FieldValue.serverTimestamp(),
           'uid': FirebaseAuth.instance.currentUser?.uid,
         });

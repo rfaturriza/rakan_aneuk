@@ -5,6 +5,14 @@ enum Gender {
   female,
 }
 
+enum ResultZScoringAge {
+  badNutrition,
+  lessNutrition,
+  goodNutrition,
+  moreNutrition,
+  obesity,
+}
+
 extension GenderExt on Gender {
   String get name {
     switch (this) {
@@ -12,6 +20,42 @@ extension GenderExt on Gender {
         return 'Laki-laki';
       case Gender.female:
         return 'Perempuan';
+      default:
+        return '';
+    }
+  }
+}
+
+extension ResultZScoringAgeExt on ResultZScoringAge {
+  String get name {
+    switch (this) {
+      case ResultZScoringAge.badNutrition:
+        return 'Buruk';
+      case ResultZScoringAge.lessNutrition:
+        return 'Kurang';
+      case ResultZScoringAge.goodNutrition:
+        return 'Baik';
+      case ResultZScoringAge.moreNutrition:
+        return 'Lebih';
+      case ResultZScoringAge.obesity:
+        return 'Obesitas';
+      default:
+        return '';
+    }
+  }
+
+  String get description {
+    switch (this) {
+      case ResultZScoringAge.badNutrition:
+        return 'Status gizi anak anda buruk, perlu diperhatikan dan memperbaiki gizi dengan makanan sehat dan bergizi serta ASI yang baik';
+      case ResultZScoringAge.lessNutrition:
+        return 'Status gizi anak anda Kurang, perlu perbaikan gizi dengan makanan sehat dan ASI yang baik';
+      case ResultZScoringAge.goodNutrition:
+        return 'Status gizi anak anda baik/normal';
+      case ResultZScoringAge.moreNutrition:
+        return 'Status gizi anak anda lebih, perlu perbaikan gizi dengan makanan sehat bergizi';
+      case ResultZScoringAge.obesity:
+        return 'Status gizi anak anda obesitas, perlunya perbaikan gizi makanan dan pola makan yang sehat';
       default:
         return '';
     }
@@ -31,18 +75,18 @@ class CalculateZScoring {
     required this.gender,
   });
 
-  Future<String> statusBBPB() async {
+  Future<ResultZScoringAge> statusBBPB() async {
     final zScoreBBPB = await _calculateZScoreBBPB();
     if (zScoreBBPB < -3) {
-      return 'Sangat Kurus';
+      return ResultZScoringAge.badNutrition;
     } else if (zScoreBBPB < -2) {
-      return 'Kurus';
+      return ResultZScoringAge.lessNutrition;
     } else if (zScoreBBPB < 2) {
-      return 'Normal';
+      return ResultZScoringAge.goodNutrition;
     } else if (zScoreBBPB < 3) {
-      return 'Gemuk';
+      return ResultZScoringAge.moreNutrition;
     } else {
-      return 'Sangat Gemuk';
+      return ResultZScoringAge.obesity;
     }
   }
 
@@ -67,6 +111,4 @@ class CalculateZScoring {
     }();
     return numerator / standardDeviation;
   }
-
-
 }

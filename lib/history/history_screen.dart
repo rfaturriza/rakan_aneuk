@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rakan_aneuk/classification/classification_result_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -39,6 +40,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
+                final dateReadable = () {
+                  final date = data[index]['created_at'].toDate();
+                  // Intl.defaultLocale = 'id_ID';
+                  return DateFormat.yMMMMEEEEd(
+                    'id_ID',
+                  ).format(date);
+                }();
                 return ListTile(
                   onTap: () {
                     Navigator.pushNamed(
@@ -50,7 +58,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       ),
                     );
                   },
-                  title: Text(data[index]['created_at'].toDate().toString()),
+                  title: Text(dateReadable),
                   subtitle: Text('Hasil: ${data[index]['result']}'),
                 );
               },

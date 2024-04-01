@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rakan_aneuk/history/history_menu_screen.dart';
 import 'package:rakan_aneuk/nutrition_suggestion/nutrition_suggestion_screen.dart';
 import 'package:rakan_aneuk/profile/edit_profile_screen.dart';
 import 'package:rakan_aneuk/profile/profile_screen.dart';
@@ -17,6 +18,7 @@ Map<String, Widget Function(BuildContext)> routes = <String, WidgetBuilder>{
   ProfileScreen.routeName: (context) => const ProfileScreen(),
   EditProfileScreen.routeName: (context) => const EditProfileScreen(),
   HistoryScreen.routeName: (context) => const HistoryScreen(),
+  HistoryMenuScreen.routeName: (context) => const HistoryMenuScreen(),
   ClassificationScreen.routeName: (context) => const ClassificationScreen(),
   ClassificationResultScreen.routeName: (context) =>
       const ClassificationResultScreen(),

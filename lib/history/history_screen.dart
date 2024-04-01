@@ -24,6 +24,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           stream: FirebaseFirestore.instance
               .collection('classification')
               .where('uid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+              .orderBy('created_at', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -42,10 +43,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
               itemBuilder: (context, index) {
                 final dateReadable = () {
                   final date = data[index]['created_at'].toDate();
-                  // Intl.defaultLocale = 'id_ID';
-                  return DateFormat.yMMMMEEEEd(
+                  final dateFormatted = DateFormat.yMMMMEEEEd(
                     'id_ID',
                   ).format(date);
+                  final timeFormatted = DateFormat.Hm(
+                    'id_ID',
+                  ).format(date);
+                  return '$dateFormatted $timeFormatted';
                 }();
                 return ListTile(
                   onTap: () {

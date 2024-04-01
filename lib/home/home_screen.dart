@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rakan_aneuk/classification/classification_screen.dart';
-import 'package:rakan_aneuk/nutrition_suggestion/nutrition_suggestion_screen.dart';
 import 'package:rakan_aneuk/profile/profile_screen.dart';
+
+import '../auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -22,11 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             _Logo(),
-            SizedBox(height: 32),
+            SizedBox(height: 16),
             _MenuSection(),
           ],
         ),
@@ -47,8 +49,15 @@ class _Logo extends StatelessWidget {
   }
 }
 
-class _MenuSection extends StatelessWidget {
+class _MenuSection extends StatefulWidget {
   const _MenuSection();
+
+  @override
+  State<_MenuSection> createState() => _MenuSectionState();
+}
+
+class _MenuSectionState extends State<_MenuSection> {
+  var isSigningOut = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,27 +67,44 @@ class _MenuSection extends StatelessWidget {
       children: <Widget>[
         ElevatedButton(
           onPressed: () {
+            Navigator.of(context).pushNamed(ProfileScreen.routeName);
+          },
+          child: const Text('Profil'),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
             Navigator.of(context).pushNamed(ClassificationScreen.routeName);
           },
           child: const Text('Klasifikasi Gizi Anak'),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(NutritionSuggestionScreen.routeName);
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.error,
+            foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+          onPressed: () async {
+            try {
+              setState(() {
+                isSigningOut = true;
+              });
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                LoginScreen.routeName,
+                (route) => false,
+              );
+            } catch (e) {
+              debugPrint(e.toString());
+            } finally {
+              setState(() {
+                isSigningOut = false;
+              });
+            }
           },
-          child: const Text('Saran Kebutuhan Gizi Anak'),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(ProfileScreen.routeName);
-          },
-          child: const Text('Profil Saya'),
+          child: const Text('Logout'),
         ),
       ],
     );
   }
 }
-
-

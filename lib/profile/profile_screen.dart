@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rakan_aneuk/history/history_screen.dart';
+import 'package:rakan_aneuk/history/history_menu_screen.dart';
 
-import '../auth/login_screen.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   var isSigningOut = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,49 +28,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const SizedBox(height: 16),
-            TextButton(
+            const _Logo(),
+            Text(
+              FirebaseAuth.instance.currentUser?.displayName ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              FirebaseAuth.instance.currentUser?.email ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(EditProfileScreen.routeName);
               },
               child: const Text('Ubah Profil'),
             ),
             const SizedBox(height: 16),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(HistoryScreen.routeName);
+                Navigator.of(context).pushNamed(HistoryMenuScreen.routeName);
               },
               child: const Text('Riwayat Saya'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-                foregroundColor: Theme.of(context).colorScheme.onError,
-              ),
-              onPressed: () async {
-                try {
-                  setState(() {
-                    isSigningOut = true;
-                  });
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    LoginScreen.routeName,
-                    (route) => false,
-                  );
-                } catch (e) {
-                  debugPrint(e.toString());
-                } finally {
-                  setState(() {
-                    isSigningOut = false;
-                  });
-                }
+              onPressed: () {
+                Navigator.of(context).pop();
               },
-              child: const Text('Logout'),
+              child: const Text('Kembali'),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Logo extends StatelessWidget {
+  const _Logo();
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 50,
+      backgroundImage: Image.asset('assets/images/logo.png').image,
     );
   }
 }

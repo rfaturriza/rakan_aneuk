@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rakan_aneuk/classification/calculate/calculate_zscoring.dart';
 
+import '../home/home_screen.dart';
+
 class ClassificationResultArguments {
   final bool canPop;
   final String id;
@@ -31,20 +33,29 @@ class _ClassificationResultScreenState
         as ClassificationResultArguments;
     void onBack() {
       if (args.canPop) {
-        Navigator.pop(context);
+        Navigator.of(context).pop(context);
         return;
       }
-      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        HomeScreen.routeName,
+        (route) => false,
+      );
     }
 
     return PopScope(
       canPop: args.canPop,
       onPopInvoked: (willPop) async {
         if (willPop) {
-          Navigator.pop(context);
           return;
         }
-        Navigator.popUntil(context, (route) => route.isFirst);
+        if (args.canPop) {
+          Navigator.of(context).pop(context);
+          return;
+        }
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeScreen.routeName,
+          (route) => false,
+        );
       },
       child: Scaffold(
         appBar: AppBar(

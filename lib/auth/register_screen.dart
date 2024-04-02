@@ -45,7 +45,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           'name': nameController.text,
           'dateOfBirth': dateOfBirthController.text,
           'email': emailController.text,
-          'isVerified': false,
         });
         await credential.user?.sendEmailVerification();
         ScaffoldMessenger.of(context).showSnackBar(

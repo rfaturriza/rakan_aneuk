@@ -59,8 +59,8 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
+          const SnackBar(
+            content: Text('Pastikan data yang diinputkan benar'),
           ),
         );
       } finally {
@@ -101,6 +101,20 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
               decoration: const InputDecoration(
                 labelText: 'Umur (bulan)',
               ),
+              // make validation just for number 0-24
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Umur tidak boleh kosong';
+                }
+                final age = int.tryParse(value);
+                if (age == null) {
+                  return 'Umur harus berupa angka';
+                }
+                if (age < 0 || age > 24) {
+                  return 'Umur harus diantara 0-24 bulan';
+                }
+                return null;
+              },
               keyboardType: TextInputType.number,
             ),
             TextFormField(
@@ -108,6 +122,16 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
               decoration: const InputDecoration(
                 labelText: 'Berat Badan (kg)',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Berat badan tidak boleh kosong';
+                }
+                final weight = double.tryParse(value);
+                if (weight == null || weight <= 0) {
+                  return 'Berat badan harus lebih dari 0';
+                }
+                return null;
+              },
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
@@ -116,6 +140,16 @@ class _ClassificationScreenState extends State<ClassificationScreen> {
               decoration: const InputDecoration(
                 labelText: 'Panjang Badan (cm)',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Panjang badan tidak boleh kosong';
+                }
+                final weight = double.tryParse(value);
+                if (weight == null || weight <= 0) {
+                  return 'Panjang badan harus lebih dari 0';
+                }
+                return null;
+              },
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),

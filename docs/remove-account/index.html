@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delete Account</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      form {
+        width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h2
+      style="
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+        margin-right: 20px;
+      "
+    >
+      Delete Account Rakan Aneuk A
+    </h2>
+    <form id="deleteAccountForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required /><br /><br />
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+      /><br /><br />
+      <button type="submit">Delete Account</button>
+    </form>
+
+    <script type="module">
+      // Your web app's Firebase configuration
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+      import * as firebase from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCF3T8n0aVWtGmIwNAhlN2srE5HwLi6cE8",
+        authDomain: "rakan-aneuk.firebaseapp.com",
+        projectId: "rakan-aneuk",
+        storageBucket: "rakan-aneuk.appspot.com",
+        messagingSenderId: "209909842735",
+        appId: "1:209909842735:web:058f9571bdeaf36d5957da",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = firebase.getAuth(app);
+
+      // Function to delete account
+      function deleteAccount(email, password) {
+        firebase
+          .signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            firebase
+              .deleteUser(user)
+              .then(() => {
+                // User deleted.
+                alert("Your account has been deleted.");
+              })
+              .catch((error) => {
+                // An error happened.
+                alert("Failed to delete account: " + error.message);
+              });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert("Failed to sign in: " + error.message);
+          });
+      }
+
+      // Handle form submission
+      document
+        .getElementById("deleteAccountForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          deleteAccount(email, password);
+        });
+    </script>
+  </body>
+</html>

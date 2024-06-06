@@ -76,14 +76,15 @@ class CalculateZScoring {
   });
 
   Future<ResultZScoringAge> statusBBPB() async {
-    final zScoreBBPB = await _calculateZScoreBBPB();
+    var zScoreBBPB = await _calculateZScoreBBPB();
+    zScoreBBPB = double.parse(zScoreBBPB.toStringAsFixed(1));
     if (zScoreBBPB < -3) {
       return ResultZScoringAge.badNutrition;
     } else if (zScoreBBPB < -2) {
       return ResultZScoringAge.lessNutrition;
-    } else if (zScoreBBPB < 2) {
+    } else if (zScoreBBPB <= 2) {
       return ResultZScoringAge.goodNutrition;
-    } else if (zScoreBBPB < 3) {
+    } else if (zScoreBBPB <= 3) {
       return ResultZScoringAge.moreNutrition;
     } else {
       return ResultZScoringAge.obesity;

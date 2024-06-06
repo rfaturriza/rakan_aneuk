@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RaKan Aneuk',
+      debugShowCheckedModeBanner: false,
       routes: routes,
       theme: theme,
       locale: const Locale('id', 'ID'),
